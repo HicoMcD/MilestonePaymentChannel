@@ -19,16 +19,16 @@ contract MilestonePaymentChannel is PullPayment {
     }
     MilestoneState public currentState = MilestoneState.DEPOSITPAYMENT;
 
-    constructor(address payable _client, address _projectManager, address _contractor) public payable {
+    constructor(address _client, address _projectManager, address _contractor) public {
         client = _client;
         projectManager = _projectManager;
         contractor = _contractor;
     }
     
-    function deposit(address payable dest) public payable inState(MilestoneState.DEPOSITPAYMENT) {
+    function deposit(address payable _contractor) public payable inState(MilestoneState.DEPOSITPAYMENT) {
         require(msg.sender == client);
         currentState = MilestoneState.INSPECTION;
-        _asyncTransfer(dest, msg.value);
+        _asyncTransfer(_contractor, msg.value);
     }
     
     function withdrawPayment(address payable _contractor) public virtual inState(MilestoneState.PAYMENT) {
